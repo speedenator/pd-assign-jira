@@ -66,7 +66,7 @@ def processRequest(req):
         if req.get(messages)[0].get("type", "") == "incident.acknowledge":
             print("Looks like an acknowledgement!")
         else:
-            print("Couldn't figure out message type")
+            print("Couldn't figure out message type" + req.get(message)[0].get("type", "type_failed"))
             #        print("Looks like a message of type " + req["message"].get(0).get("type"))
     except Exception as inst:
         print("Try failed!")
