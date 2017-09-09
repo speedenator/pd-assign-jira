@@ -56,7 +56,12 @@ def processRequest(req):
         return {}
     else:
         print("Looks like a PagerDuty message!\n")
-    
+
+    if req["message"][0]["type"] == "incident.acknowledge":
+        print("Looks like an acknowledgement!")
+    else:
+        print("Looks like a message of type " + req["message"][0]["type"])
+        
     if req.get("result").get("action") != "yahooWeatherForecast":
         return {}
     baseurl = "https://query.yahooapis.com/v1/public/yql?"
