@@ -24,6 +24,7 @@ from urllib.error import HTTPError
 
 import json
 import os
+import re
 
 from flask import Flask
 from flask import request
@@ -66,6 +67,15 @@ def processRequest(req):
         for msg in req[messages]:
             if msg.get("type", "") == "incident.acknowledge":
                 print("Looks like an acknowledgement!")
+                
+                data = msg["data"]
+                incident_key = data["incident"].get("incident_key", "")
+                if re.match(r"^[A-Z0-9]+-[0-9]+$", incident_key): # TODO: Jira REGEXP check
+                    print("Found Jira incident key " + incident_key)
+                else:
+                    print("Didn't find Jira incident key " + incident_key)
+                    
+                
             else:
                 print("Couldn't figure out message type " + msg.get("type", "type_failed"))
             #        print("Looks like a message of type " + req["message"].get(0).get("type"))
