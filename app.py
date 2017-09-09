@@ -62,10 +62,10 @@ def processRequest(req):
 
     return {}
         
-    if req.get(["message"]).get(0).get("type") == "incident.acknowledge":
-        print("Looks like an acknowledgement!")
-    else:
-        print("Looks like a message of type " + req["message"][0]["type"])
+#     if req.get(["message"]).get(0).get("type") == "incident.acknowledge":
+#         print("Looks like an acknowledgement!")
+#     else:
+#         print("Looks like a message of type " + req["message"][0]["type"])
         
     if req.get("result").get("action") != "yahooWeatherForecast":
         return {}
