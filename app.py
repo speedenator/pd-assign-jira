@@ -50,6 +50,11 @@ def webhook():
 
 
 def processRequest(req):
+
+    if req.get("messages", "") == "":
+        print "Messages is empty, bailing..."
+        return {}
+    
     if req.get("result").get("action") != "yahooWeatherForecast":
         return {}
     baseurl = "https://query.yahooapis.com/v1/public/yql?"
