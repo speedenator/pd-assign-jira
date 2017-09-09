@@ -54,6 +54,8 @@ def processRequest(req):
     if req.get("messages", "") == "":
         print("Messages is empty, bailing...\n")
         return {}
+    else:
+        print("Looks like a PagerDuty message!\n")
     
     if req.get("result").get("action") != "yahooWeatherForecast":
         return {}
