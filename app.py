@@ -33,8 +33,8 @@ from flask import make_response
 app = Flask(__name__)
 
 
-@app.route('/webhook3', methods=['POST'])
-def webhook3():
+@app.route('/webhook4', methods=['POST'])
+def webhook4():
 
     print("Here we go!")
 
