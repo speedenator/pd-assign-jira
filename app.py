@@ -33,8 +33,8 @@ from flask import make_response
 app = Flask(__name__)
 
 
-@app.route('/webhook2', methods=['POST'])
-def webhook2():
+@app.route('/webhook3', methods=['POST'])
+def webhook3():
 
     print("Here we go!")
 
@@ -54,14 +54,16 @@ def webhook2():
 
 def processRequest(req):
 
-    if req.get("messages", "") == "":
+    messages = "messages"
+    
+    if req.get(messages, "") == "":
         print("Messages is empty, bailing...\n")
         return {}
     else:
         print("Looks like a PagerDuty message!\n")
 
     try:
-        if req.get("messages")[0].get("type", "") == "incident.acknowledge":
+        if req.get(messages)[0].get("type", "") == "incident.acknowledge":
             print("Looks like an acknowledgement!")
         else:
             print("Couldn't figure out message type")
