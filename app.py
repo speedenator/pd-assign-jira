@@ -1,4 +1,4 @@
-# -*- coding:utf8 -*-
+# -*- coding:utf-8 -*-
 # !/usr/bin/env python
 # Copyright 2017 Google Inc. All Rights Reserved.
 #
@@ -52,7 +52,7 @@ def webhook():
 def processRequest(req):
 
     if req.get("messages", "") == "":
-        print "Messages is empty, bailing..."
+        print("Messages is empty, bailing...\n")
         return {}
     
     if req.get("result").get("action") != "yahooWeatherForecast":
