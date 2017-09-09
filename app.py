@@ -74,7 +74,9 @@ def processRequest(req):
                     print("Found Jira incident key " + incident_key)
                 else:
                     print("Didn't find Jira incident key " + incident_key)
-                    
+
+                assigned_user = data["incident"]["assigned_to_user"]["email"]
+                print("Assigned to user is: " + assigned_user)
                 
             else:
                 print("Couldn't figure out message type " + msg.get("type", "type_failed"))
