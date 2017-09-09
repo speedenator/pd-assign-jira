@@ -63,10 +63,11 @@ def processRequest(req):
         print("Looks like a PagerDuty message!\n")
 
     try:
-        if req.get(messages)[0].get("type", "") == "incident.acknowledge":
-            print("Looks like an acknowledgement!")
-        else:
-            print("Couldn't figure out message type" + req.get(messages)[0].get("type", "type_failed"))
+        for msg in req[messages]:
+            if msg.get("type", "") == "incident.acknowledge":
+                print("Looks like an acknowledgement!")
+            else:
+                print("Couldn't figure out message type " + msg.get("type", "type_failed"))
             #        print("Looks like a message of type " + req["message"].get(0).get("type"))
     except Exception as inst:
         print("Try failed!")
