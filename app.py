@@ -60,12 +60,19 @@ def processRequest(req):
     else:
         print("Looks like a PagerDuty message!\n")
 
-    if req.get("message")[0].get("type", "") == "incident.acknowledge":
-        print("Looks like an acknowledgement!")
-    else:
-        print("Couldn't figure out message type")
-#        print("Looks like a message of type " + req["message"].get(0).get("type"))
-        
+    try:
+        if req.get("message")[0].get("type", "") == "incident.acknowledge":
+            print("Looks like an acknowledgement!")
+        else:
+            print("Couldn't figure out message type")
+            #        print("Looks like a message of type " + req["message"].get(0).get("type"))
+    except Exception as inst:
+        print("Try failed!")
+        print(type(inst))    # the exception instance
+        print(inst.args)     # arguments stored in .args
+        print(inst)          # __str__ allows args to be printed directly,
+
+
     if req.get("result").get("action") != "yahooWeatherForecast":
         return {}
     baseurl = "https://query.yahooapis.com/v1/public/yql?"
