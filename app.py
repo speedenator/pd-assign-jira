@@ -60,7 +60,7 @@ def processRequest(req):
     else:
         print("Looks like a PagerDuty message!\n")
 
-    if req.get("message").get(0).get("type") == "incident.acknowledge":
+    if req.get("message")[0].get("type", "") == "incident.acknowledge":
         print("Looks like an acknowledgement!")
     else:
         print("Couldn't figure out message type")
