@@ -48,8 +48,8 @@ def debug(str):
 
 verbose = 1
         
-@app.route('/webhook', methods=['POST'])
-def webhook():
+@app.route('/webhook8', methods=['POST'])
+def webhook8():
 
     debug("Here we go!")
 
