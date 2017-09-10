@@ -46,12 +46,12 @@ def debug(str):
 # set these via heroku config:set FOO=bar        
 verbose = os.environ.get('VERBOSE', 0)
 user = os.environ.get('USER', "")
-pass = os.environ.get('PASS', "")
+pw = os.environ.get('PASS', "")
 
 options = {
     'server': 'https://cookbrite.atlassian.net'}
 try:
-    jira = JIRA(options, basic_auth = (user, pass))
+    jira = JIRA(options, basic_auth = (user, pw))
 except JIRAError as e:
     if e.status_code == 401:
         log("Login to JIRA failed, check your username / password (uname: " + user + ")")
