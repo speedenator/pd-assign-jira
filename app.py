@@ -39,7 +39,7 @@ app = Flask(__name__)
 def log(str):
     print(str)
 
-def debug(str):
+def dbg(str):
     if verbose:
         print(str)
 
@@ -53,7 +53,7 @@ options = {
     'max_retries': 1
 }
 
-debug("User: " + user, " Pass: ", pw)
+dbg("User: " + user, " Pass: ", pw)
 
 try:
     jira = JIRA(options, basic_auth = (user, pw))
@@ -66,12 +66,12 @@ except JIRAError as e:
 @app.route('/webhook', methods=['POST'])
 def webhook():
 
-    debug("Here we go!")
+    dbg("Here we go!")
 
     req = request.get_json(silent=True, force=True)
 
-    debug("Request:")
-    debug(json.dumps(req, indent=4))
+    dbg("Request:")
+    dbg(json.dumps(req, indent=4))
 
     res = processRequest(req)
 
@@ -92,23 +92,23 @@ def processRequest(req):
         log("Messages is empty, bailing...\n")
         return {}
     else:
-        debug("Looks like a PagerDuty message!\n")
+        dbg("Looks like a PagerDuty message!\n")
 
     try:
         for msg in req[messages]:
             if msg.get("type", "") == "incident.acknowledge":
-                debug("Looks like an acknowledgement!")
+                dbg("Looks like an acknowledgement!")
                 
                 data = msg["data"]
                 incident_key = data["incident"].get("incident_key", "")
                 if re.match(r"^[A-Z0-9]+-[0-9]+$", incident_key): # TODO: Jira REGEXP check
-                    debug("Found Jira incident key " + incident_key)
+                    dbg("Found Jira incident key " + incident_key)
                 else:
-                    debug("Didn't find Jira incident key " + incident_key)
+                    dbg("Didn't find Jira incident key " + incident_key)
                     return {}
 
                 assigned_user = data["incident"]["assigned_to_user"]["email"]
-                debug("Assigned to user is: " + assigned_user)
+                dbg("Assigned to user is: " + assigned_user)
 
                 issue = jira.issue(incident_key)
                 users = jira.search_users(assigned_user)
@@ -124,7 +124,7 @@ def processRequest(req):
                     return {}
                 
             else:
-                debug("Couldn't figure out message type " + msg.get("type", "type_failed"))
+                dbg("Couldn't figure out message type " + msg.get("type", "type_failed"))
             #        print("Looks like a message of type " + req["message"].get(0).get("type"))
     except Exception as inst:
         log("Try failed!")
