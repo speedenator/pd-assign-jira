@@ -27,6 +27,7 @@ import os
 import re
 
 from jira import JIRA
+from jira.exceptions import JIRAError
 
 from flask import Flask
 from flask import request
@@ -35,10 +36,6 @@ from flask import make_response
 # Flask app should start in global layout
 app = Flask(__name__)
 
-options = {
-    'server': 'https://cookbrite.atlassian.net'}
-jira = JIRA(options, basic_auth = ('erik@metabrite.com', '2065173039'))
-
 def log(str):
     print(str)
 
@@ -46,10 +43,23 @@ def debug(str):
     if verbose:
         print(str)
 
-verbose = 1
+# set these via heroku config:set FOO=bar        
+verbose = os.environ.get('VERBOSE', 0)
+user = os.environ.get('USER', "")
+pass = os.environ.get('PASS', "")
+
+options = {
+    'server': 'https://cookbrite.atlassian.net'}
+try:
+    jira = JIRA(options, basic_auth = (user, pass))
+except JIRAError as e:
+    if e.status_code == 401:
+        log("Login to JIRA failed, check your username / password (uname: " + user + ")")
+        exit(-1)
+
         
-@app.route('/webhook8', methods=['POST'])
-def webhook8():
+@app.route('/webhook', methods=['POST'])
+def webhook():
 
     debug("Here we go!")
 
