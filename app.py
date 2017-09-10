@@ -39,50 +39,60 @@ options = {
     'server': 'https://cookbrite.atlassian.net'}
 jira = JIRA(options, basic_auth = ('erik@metabrite.com', '2065173039'))
 
+def log(str):
+    print(str)
 
+def debug(str):
+    if verbose:
+        print(str)
+
+verbose = 1
+        
 @app.route('/webhook', methods=['POST'])
 def webhook():
 
-    print("Here we go!")
+    debug("Here we go!")
 
     req = request.get_json(silent=True, force=True)
 
-    print("Request:")
-    print(json.dumps(req, indent=4))
+    debug("Request:")
+    debug(json.dumps(req, indent=4))
 
     res = processRequest(req)
 
     res = json.dumps(res, indent=4)
     # print(res)
-    r = make_response(res)
-    r.headers['Content-Type'] = 'application/json'
+    r = make_response(res.get("Success", ""))
+#    r.headers['Content-Type'] = 'application/json'
     return r
 
 
 def processRequest(req):
 
     messages = "messages"
+    res = {}
     
     if req.get(messages, "") == "":
-        print("Messages is empty, bailing...\n")
+        log("Messages is empty, bailing...\n")
         return {}
     else:
-        print("Looks like a PagerDuty message!\n")
+        debug("Looks like a PagerDuty message!\n")
 
     try:
         for msg in req[messages]:
             if msg.get("type", "") == "incident.acknowledge":
-                print("Looks like an acknowledgement!")
+                debug("Looks like an acknowledgement!")
                 
                 data = msg["data"]
                 incident_key = data["incident"].get("incident_key", "")
                 if re.match(r"^[A-Z0-9]+-[0-9]+$", incident_key): # TODO: Jira REGEXP check
-                    print("Found Jira incident key " + incident_key)
+                    debug("Found Jira incident key " + incident_key)
                 else:
-                    print("Didn't find Jira incident key " + incident_key)
+                    debug("Didn't find Jira incident key " + incident_key)
+                    return {}
 
                 assigned_user = data["incident"]["assigned_to_user"]["email"]
-                print("Assigned to user is: " + assigned_user)
+                debug("Assigned to user is: " + assigned_user)
 
                 issue = jira.issue(incident_key)
                 users = jira.search_users(assigned_user)
@@ -91,79 +101,22 @@ def processRequest(req):
                     uname = users[0].name
 
                     jira.assign_issue(incident_key, uname)
-                    print("Assigning Jira issue " + incident_key + " to Jira user " + uname)
+                    log("Assigning Jira issue " + incident_key + " to Jira user " + uname)
+                    res = {"Success" : "\"" + incident_key + " " + uname + "\""}
+                else:
+                    log("Unable to find user " + assigned_user + " in Jira")
+                    return {}
                 
             else:
-                print("Couldn't figure out message type " + msg.get("type", "type_failed"))
+                debug("Couldn't figure out message type " + msg.get("type", "type_failed"))
             #        print("Looks like a message of type " + req["message"].get(0).get("type"))
     except Exception as inst:
-        print("Try failed!")
-        print(type(inst))    # the exception instance
-        print(inst.args)     # arguments stored in .args
-        print(inst)          # __str__ allows args to be printed directly,
+        log("Try failed!")
+        log(type(inst))    # the exception instance
+        log(inst.args)     # arguments stored in .args
+        log(inst)          # __str__ allows args to be printed directly,
 
-
-    if req.get("result").get("action") != "yahooWeatherForecast":
-        return {}
-    baseurl = "https://query.yahooapis.com/v1/public/yql?"
-    yql_query = makeYqlQuery(req)
-    if yql_query is None:
-        return {}
-    yql_url = baseurl + urlencode({'q': yql_query}) + "&format=json"
-    result = urlopen(yql_url).read()
-    data = json.loads(result)
-    res = makeWebhookResult(data)
     return res
-
-
-def makeYqlQuery(req):
-    result = req.get("result")
-    parameters = result.get("parameters")
-    city = parameters.get("geo-city")
-    if city is None:
-        return None
-
-    return "select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='" + city + "')"
-
-
-def makeWebhookResult(data):
-    query = data.get('query')
-    if query is None:
-        return {}
-
-    result = query.get('results')
-    if result is None:
-        return {}
-
-    channel = result.get('channel')
-    if channel is None:
-        return {}
-
-    item = channel.get('item')
-    location = channel.get('location')
-    units = channel.get('units')
-    if (location is None) or (item is None) or (units is None):
-        return {}
-
-    condition = item.get('condition')
-    if condition is None:
-        return {}
-
-    # print(json.dumps(item, indent=4))
-
-    speech = "Today in " + location.get('city') + ": " + condition.get('text') + \
-             ", the temperature is " + condition.get('temp') + " " + units.get('temperature')
-
-    print("Response:")
-    print(speech)
-
-    return {
-        "speech": speech,
-        "displayText": speech,
-        # "data": data,
-        # "contextOut": [],
-        "source": "apiai-weather-webhook-sample"
-    }
 
 
 if __name__ == '__main__':
