@@ -26,12 +26,18 @@ import json
 import os
 import re
 
+from jira import JIRA
+
 from flask import Flask
 from flask import request
 from flask import make_response
 
 # Flask app should start in global layout
 app = Flask(__name__)
+
+options = {
+    'server': 'https://cookbrite.atlassian.net'}
+jira = JIRA(options)
 
 
 @app.route('/webhook6', methods=['POST'])
