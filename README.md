@@ -36,12 +36,12 @@ Jira are the same (but usernames in Jira can and usually are different).
 # Setup
 
 We assume you already have the Jira -> PagerDuty Web Hook set up. If
-not, go here: [https://www.pagerduty.com/docs/guides/jira-webhook-email-integration-guide/][https://www.pagerduty.com/docs/guides/jira-webhook-email-integration-guide/]
+not, go here: https://www.pagerduty.com/docs/guides/jira-webhook-email-integration-guide/
 
 First, clone or fork this repo:
 
-% git clone https://github.com/speedenator/pd2jira.git
-% cd pd2jira
+	% git clone https://github.com/speedenator/pd2jira.git
+	% cd pd2jira
 
 ## Deploy this to Heroku
 
@@ -49,32 +49,32 @@ First, clone or fork this repo:
 [https://devcenter.heroku.com/articles/getting-started-with-python#deploy-the-app][Heroku
 Python docs] for more details)
 
-% heroku create
+	% heroku create
 
 We'll assume the app name here is 'hooky-mchookface-1234'. Now, set
 some config vars:
 
-% heroku config:set USER=<jira username>
-% heroku config:set PASS=<jira password>
-% heroku config:set SITE=<jira site>
+	% heroku config:set USER=<jira username>
+	% heroku config:set PASS=<jira password>
+	% heroku config:set SITE=<jira site>
 
 To be clear, let's say your site is 'https://spaceballs.atlassian.net',
 your name is 'skroob@spaceballs.com', and your password is '12345'.
 
-% heroku config:set USER=skroob@spaceballs.com
-% heroku config:set PASS=12345
-% heroku config:set SITE=spaceballs
+	% heroku config:set USER=skroob@spaceballs.com
+	% heroku config:set PASS=12345
+	% heroku config:set SITE=spaceballs
 
 Note: given how crappy putting a password in a config is, I'd
 recommend you make a special Jira user for this vs a real one.
 
 Now, push the code:
 
-% git push heroku master
+	% git push heroku master
 
 Make sure things are working via:
 
-% heroku logs --tail
+	% heroku logs --tail
 
 (need more info? turn on verbose logging:)
 
