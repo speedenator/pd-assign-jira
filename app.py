@@ -37,11 +37,11 @@ app = Flask(__name__)
 
 options = {
     'server': 'https://cookbrite.atlassian.net'}
-jira = JIRA(options)
+jira = JIRA(options, basic_auth = ('erik@metabrite.com', '2065173039'))
 
 
-@app.route('/webhook6', methods=['POST'])
-def webhook6():
+@app.route('/webhook', methods=['POST'])
+def webhook():
 
     print("Here we go!")
 
@@ -83,6 +83,15 @@ def processRequest(req):
 
                 assigned_user = data["incident"]["assigned_to_user"]["email"]
                 print("Assigned to user is: " + assigned_user)
+
+                issue = jira.issue(incident_key)
+                users = jira.search_users(assigned_user)
+                uname = ""
+                if len(users):
+                    uname = users[0].name
+
+                    jira.assign_issue(incident_key, uname)
+                    print("Assigning Jira issue " + incident_key + " to Jira user " + uname)
                 
             else:
                 print("Couldn't figure out message type " + msg.get("type", "type_failed"))
