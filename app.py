@@ -53,7 +53,7 @@ options = {
     'max_retries': 1
 }
 
-dbg("User: " + user, " Pass: ", pw)
+dbg("User: " + user + " Pass: " + pw)
 
 try:
     jira = JIRA(options, basic_auth = (user, pw))
