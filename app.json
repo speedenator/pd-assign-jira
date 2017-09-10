@@ -1,0 +1,7 @@
+{
+    "name": "pd2jira webhook",
+    "description": "assigns a Jira issue to same user as a PagerDuty ACK",
+    "repository": "https://github.com/speedenator/pd2jira",
+    "logo": "",
+    "keywords": ["pagerduty", "jira", "webhook"]
+}
