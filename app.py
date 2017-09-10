@@ -45,10 +45,10 @@ def dbg(str):
 
 # set these via heroku config:set FOO=bar        
 verbose = os.environ.get('VERBOSE', 0)
-# user = os.environ.get('USER', "")
-# pw = os.environ.get('PASS', "")
-user = 'erik@metabrite.com'
-pw = '2065173039'
+user = os.environ.get('USER', "")
+pw = os.environ.get('PASS', "")
+# user = 'erik@metabrite.com'
+
 
 options = {
     'server': 'https://cookbrite.atlassian.net',
