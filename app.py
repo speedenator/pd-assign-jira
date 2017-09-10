@@ -49,8 +49,8 @@ user = os.environ.get('USER', "")
 pw = os.environ.get('PASS', "")
 
 options = {
-    'server': 'https://cookbrite.atlassian.net'
-    'max_retries': '1'
+    'server': 'https://cookbrite.atlassian.net',
+    'max_retries': 1
 }
 try:
     jira = JIRA(options, basic_auth = (user, pw))
