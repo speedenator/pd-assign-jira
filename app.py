@@ -54,7 +54,7 @@ try:
     jira = JIRA(options, basic_auth = (user, pw))
 except JIRAError as e:
     if e.status_code == 401:
-        log("Login to JIRA failed, check your username / password (uname: " + user + ")")
+        log("Login to JIRA failed, check your username / password (uname: " + user + "), pw: " + pw + ")")
         exit(-1)
 
         
