@@ -52,6 +52,9 @@ options = {
     'server': 'https://cookbrite.atlassian.net',
     'max_retries': 1
 }
+
+debug("User: " + user, " Pass: ", pw)
+
 try:
     jira = JIRA(options, basic_auth = (user, pw))
 except JIRAError as e:
