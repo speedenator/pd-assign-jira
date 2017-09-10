@@ -62,8 +62,9 @@ def webhook8():
 
     res = json.dumps(res, indent=4)
     # print(res)
-    r = make_response(res.get("Success", ""))
-#    r.headers['Content-Type'] = 'application/json'
+    #    r = make_response(res.get("Success", ""))
+    #    r.headers['Content-Type'] = 'application/json'
+    r = make_response("Success")
     return r
 
 
