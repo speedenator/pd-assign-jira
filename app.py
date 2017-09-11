@@ -40,7 +40,7 @@ def log(str):
     print(str)
 
 def dbg(str):
-    if verbose != 0 && verbose != "0":  # handle string config
+    if verbose != 0 and verbose != "0":  # handle string config
         print(str)
 
 # set these via heroku config:set FOO=bar        
