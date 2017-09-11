@@ -98,7 +98,7 @@ def processRequest(req):
                 
             data = msg["data"]
             incident_key = data["incident"].get("incident_key", "")
-            if re.match(r"^[A-Z0-9]+-[0-9]+$", incident_key) == 0: 
+            if re.match(r"^[A-Z0-9]+-[0-9]+$", incident_key) == None: 
                 dbg("Didn't find Jira incident key " + incident_key)
                 continue
             dbg("Found Jira incident key " + incident_key)
